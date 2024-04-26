@@ -22,6 +22,21 @@ function validate_branch_name {
     fi
 }
 
+# Function to check if a Jira ticket exists
+function check_jira_ticket {
+    local ticket_number="$1"
+    local jira_url="https://jira.se.com/rest/api/2/issue/$ticket_number"
+    local auth_header="Authorization: Basic U0VTQTY2NDM5Nzptby1hcGktTUY5c1BQMkp4OHlBdGFjN1NEVXo5c3ND"
+
+    # Make the HTTP request to Jira
+    response=$(curl -s -o /dev/null -w "%{http_code}" -X GET -H "$auth_header" "$jira_url")
+
+    if [ $response -ne 200 ]; then
+        echo "Error: Jira ticket $ticket_number does not exist"
+        return 1
+    fi
+}
+
 # Validate each branch being pushed
 while read local_ref local_sha remote_ref remote_sha
 do
@@ -30,6 +45,12 @@ do
     
     # Validate the new branch name
     validate_branch_name "$new_branch" || exit 1
+    
+    # Extract the Jira ticket number from the branch name
+    ticket_number=$(echo "$new_branch" | grep -oE '[A-Z]+-[0-9]+')
+    
+    # Check if the Jira ticket exists
+    check_jira_ticket "$ticket_number" || exit 1
 done
 
 # Allow the push to proceed if all checks pass
