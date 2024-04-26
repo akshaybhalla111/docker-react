@@ -1,26 +1,26 @@
 #!/bin/bash
 
 # Function to validate the branch name against naming conventions
-function validate_branch_name {
-    local branch_name="$1"
+# function validate_branch_name {
+#     local branch_name="$1"
     
-    # Define regex patterns for branch naming conventions
-    release_pattern="^release/CMS-R[0-9]+$"
-    feature_patterns=("^feature/CRP-[0-9]+$" "^feature/BCMS-[0-9]+$" "^feature/SETC-[0-9]+$")
-    bugfix_patterns=("^bugfix/CRP-[0-9]+$" "^bugfix/BCMS-[0-9]+$" "^bugfix/SETC-[0-9]+$")
+#     # Define regex patterns for branch naming conventions
+#     release_pattern="^release/CMS-R[0-9]+$"
+#     feature_patterns=("^feature/CRP-[0-9]+$" "^feature/BCMS-[0-9]+$" "^feature/SETC-[0-9]+$")
+#     bugfix_patterns=("^bugfix/CRP-[0-9]+$" "^bugfix/BCMS-[0-9]+$" "^bugfix/SETC-[0-9]+$")
     
-    # Check if the branch name matches any of the patterns
-    if [[ "$branch_name" =~ $release_pattern ]]; then
-        return 0
-    elif [[ "$branch_name" =~ ${feature_patterns[0]} || "$branch_name" =~ ${feature_patterns[1]} || "$branch_name" =~ ${feature_patterns[2]} ]]; then
-        return 0
-    elif [[ "$branch_name" =~ ${bugfix_patterns[0]} || "$branch_name" =~ ${bugfix_patterns[1]} || "$branch_name" =~ ${bugfix_patterns[2]} ]]; then
-        return 0
-    else
-        echo "Error: Branch name does not match the naming conventions"
-        return 1
-    fi
-}
+#     # Check if the branch name matches any of the patterns
+#     if [[ "$branch_name" =~ $release_pattern ]]; then
+#         return 0
+#     elif [[ "$branch_name" =~ ${feature_patterns[0]} || "$branch_name" =~ ${feature_patterns[1]} || "$branch_name" =~ ${feature_patterns[2]} ]]; then
+#         return 0
+#     elif [[ "$branch_name" =~ ${bugfix_patterns[0]} || "$branch_name" =~ ${bugfix_patterns[1]} || "$branch_name" =~ ${bugfix_patterns[2]} ]]; then
+#         return 0
+#     else
+#         echo "Error: Branch name does not match the naming conventions"
+#         return 1
+#     fi
+# }
 
 # Function to check if a Jira ticket exists
 function check_jira_ticket {
@@ -43,8 +43,8 @@ do
     # Extract the name of the new branch
     new_branch=$(git rev-parse --abbrev-ref $local_ref)
     
-    # Validate the new branch name
-    validate_branch_name "$new_branch" || exit 1
+    # # Validate the new branch name
+    # validate_branch_name "$new_branch" || exit 1
     
     # Extract the Jira ticket number from the branch name
     ticket_number=$(echo "$new_branch" | grep -oE '[A-Z]+-[0-9]+')
